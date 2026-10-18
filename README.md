@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tutico Website
+
+A fast, SEO-focused single-page website for Tutico, a sandwich and breakfast spot in Lüleburgaz, Turkey. Built with Next.js 16, React 19 and Tailwind CSS 4.
+
+## Overview
+
+The site gives local customers everything they need in one page: the menu, the story of the place, location and opening hours, and quick links to order through the delivery platforms they already use. It is a static content site with no backend; all content lives in the components.
+
+Search visibility for local queries (e.g. "lüleburgaz sandviç", "lüleburgaz kahvaltı") was a core goal, so the page uses a clear heading structure, rich metadata and `Restaurant` structured data.
+
+## Features
+
+- Hero section with quick actions
+- Menu section: sandwiches, breakfast, mantı, snacks and croissants
+- About section with Framer Motion animations
+- Contact section with an embedded Google Map
+- Order modal linking to GetirYemek, Yemeksepeti, Trendyol Yemek, WhatsApp and a QR menu
+- Floating menu button for quick navigation on mobile
+- SEO: page metadata and Open Graph tags, JSON-LD `Restaurant` schema (address, geo coordinates, opening hours), `sitemap.ts`, `robots.txt`
+- Responsive, mobile-first layout
+
+## Tech Stack
+
+| Area | Technologies |
+|---|---|
+| Framework | Next.js 16 (App Router, standalone output, React Compiler) |
+| UI | React 19, TypeScript, Tailwind CSS 4 |
+| Animation / icons | Framer Motion, Lucide React |
+| Deployment | Docker, CapRover (`captain-definition`) |
+
+## Project Structure
+
+```
+.
+├── app/
+│   ├── layout.tsx          # Metadata, fonts, global layout
+│   ├── page.tsx            # Single page composed of the sections below
+│   ├── sitemap.ts
+│   └── globals.css
+├── components/
+│   ├── Header.tsx, Hero.tsx, Menu.tsx, About.tsx, Contact.tsx, Footer.tsx
+│   ├── OrderModal.tsx      # Delivery platform links
+│   ├── FloatingMenuButton.tsx
+│   └── StructuredData.tsx  # JSON-LD Restaurant schema
+├── public/                 # Images, robots.txt
+├── content.md              # Development plan and SEO keyword notes (Turkish)
+├── Dockerfile
+└── captain-definition
+```
 
 ## Getting Started
 
-First, run the development server:
+Requires Node.js 20+.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Other scripts:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Script | Description |
+|---|---|
+| `npm run build` | Production build (standalone output) |
+| `npm start` | Start the production server |
+| `npm run lint` | ESLint |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+No environment variables are required.
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+The multi-stage `Dockerfile` builds the app on Node 20 Alpine and runs the Next.js standalone server (`node server.js`) on port `3000`. `captain-definition` lets you deploy the repo directly to CapRover.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+docker build -t tutico-website .
+docker run -p 3000:3000 tutico-website
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The sitemap and `robots.txt` are configured for the `tutico.co` domain; update them if you deploy elsewhere.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built by [Mertcan Eren](https://github.com/mertcaneren0)
